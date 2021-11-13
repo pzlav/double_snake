@@ -5,7 +5,7 @@ import sys
 XSIZE = 1200
 YSIZE = 800
 BASE = 50
-FPS = 5
+FPS = 6
 
 
 def rect(point: tuple) -> tuple:
@@ -32,6 +32,7 @@ class App:
         dx = BASE
         dy = 0
         length = 1
+        add_fps = 0
         apple = (randrange(0, XSIZE, BASE), randrange(0, YSIZE, BASE))
         while True:
             x = self.snake[-1][0]
@@ -61,19 +62,22 @@ class App:
                 dx = 0
                 dy = BASE
 
+            # eating an apple
             if apple[0] == x and apple[1] == y:
                 apple = (randrange(0, XSIZE, BASE), randrange(0, YSIZE, BASE))
                 length += 1
+                add_fps = int(length/2)
 
             if x > XSIZE or x < 0 or y > YSIZE or y < 0:
                 break
 
+            # check for collision
             if (dx+x, dy+y) not in self.snake:
                 self.snake.append((dx+x, dy+y))
                 self.snake = self.snake[-length:]
             else:
                 break
-            self.clock.tick(FPS)
+            self.clock.tick(FPS+add_fps)
 
 
 if __name__ == '__main__':
